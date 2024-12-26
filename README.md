@@ -6,7 +6,7 @@ This repository contains the artifact for reproducing our FAST '25 paper "PolySt
 * [Overview](#overview)
 * [Setup](#setup)
 * [Running Experiments](#running-experiments)
-* [Generating Results](#generating-results)
+* [Generating Results](#generating-results) (Work in progress)
 * [Known Issues](#known-issues)
 
 
@@ -22,7 +22,8 @@ This repository contains the artifact for reproducing our FAST '25 paper "PolySt
     ├── kernel/                # Directory for building Linux 5.1.0+ (NOVA)
     ├── benchmarks/            # Benchmark workloads
     ├── applications/          # Application workloads
-    ├── experiments/           # Experiment scripts
+    ├── experiments/           # Experiment scripts for all benchmarks and applications
+    ├── resultgen/             # Experiment scripts for generating all data points (WIP)
     ├── LICENSE
     └── README.md
 
@@ -81,20 +82,9 @@ $ cd /localhome/aereview/polystore-artifact
 $ source scripts/setvars.sh
 $ cd $BASE/polylib
 $ make
-$ cd polylib/src/polyos
+$ cd $BASE/polylib/src/polyos
 $ make
-$ cd $BASE
-```
-
-Please use `screen` to manage the terminal session and maintain the connection.
-
-```
-$ screen
-$ cd /localhome/aereview/polystore-artifact
-$ source scripts/setvars.sh
-$ cd $BASE/polylib
-$ make
-$ cd polylib/src/polyos
+$ cd $BASE/tools
 $ make
 $ cd $BASE
 ```
@@ -132,6 +122,13 @@ $ cd $BASE/applications/rocksdb
 $ ./build_rocksdb.sh
 ```
 
+GraphWalker
+
+```
+$ cd $BASE/applications/graphwalker
+$ make
+```
+
 ### Step 6: Mount file systems for Heterogeneous Storage
 
 First, check if the desired file systems are mounted
@@ -166,7 +163,7 @@ For the benchamrks and applicaions, we have separate running scripts for each ap
 Expect output will be similar to ```aggregated thruput 7072.90 MB/s, average latency 32.08 us```. If you can see the above output, you are good for all necessary environmental settings. You can start running all other experiments for artifact evaluation.
 
 ```
-$ cd $BASE/tests/
+$ cd $BASE/experiments/microbench
 ```
 
 #### Run *PolyStore-static* 
@@ -204,7 +201,7 @@ $ ./scripts/run_nvmeonly.sh
 Expect output will be similar to ```IO Summary: 26330 ops 2622.160 ops/s 262/525 rd/wr 2103.1mb/s  19.9ms/op```. If you can see the above output, it means Filebench is working properly.
 
 ```
-$ cd $BASE/tests/filebench
+$ cd $BASE/experiments/filebench
 ```
 
 #### Run *PolyStore (w/ Poly-cache enabled)* 
@@ -230,7 +227,7 @@ $ ./scripts/run_nvmeonly.sh
 Expect output will be similar to ```IO Summary: 26330 ops 2622.160 ops/s 262/525 rd/wr 2103.1mb/s  19.9ms/op```. If you can see the above output, It means RocksDB YCSB is running properly.
 
 ```
-$ cd $BASE/tests/rocksdb
+$ cd $BASE/experiments/rocksdb
 ```
 
 #### Run *PolyStore (w/ Poly-cache enabled)* 
@@ -256,7 +253,7 @@ $ ./scripts/run_nvmeonly_ycsb.sh
 Expect output will be show a breakdown starting with the title ``` === REPORT FOR multi-source-personalizedpagerank() ===```. If you can see this output, it means GraphWalker is working properly.
 
 ```
-$ cd $BASE/tests/graphwalker
+$ cd $BASE/experiments/graphwalker
 ```
 
 #### Run *PolyStore (w/ Poly-cache enabled)* 
