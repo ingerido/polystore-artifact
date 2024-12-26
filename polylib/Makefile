@@ -1,4 +1,4 @@
-all: polystorelib polyos
+all: polystorelib
 
 CC=gcc
 CFLAGS=-fPIC -shared -D_DEBUG -D_GNU_SOURCE
@@ -13,8 +13,6 @@ LDFLAGS=-L$(INTERVAL_TREE_DIR) -lintervaltreelib -L$(SYSCALL_INTERCEPT_DIR) -lsy
 INCLUDE=-I$(INTERVAL_TREE_DIR)/ -I$(UTHASH_DIR)/include -I$(SYSCALL_INTERCEPT_SRC_DIR)/include
 LIBSRC=$(wildcard ./src/*.c)
 BUILD=./build
-
-POLYOS_DIR := $(abspath ./src/polyos)
 
 # Create build directory if not exist
 $(shell mkdir -p $(BUILD))
@@ -43,15 +41,10 @@ polystorelib:
 	$(CC) $(CFLAGS) $(INCLUDE) -o $(BUILD)/libpolystore_stat.so $(POLYSTORE_BASE) $(POLYSTORE_IOSTAT) $(LIBSRC) $(LIBS) $(LDFLAGS)
 	$(CC) $(CFLAGS) $(INCLUDE) -o $(BUILD)/libpolystore_stat_dynamic.so $(POLYSTORE_DYNAMIC) $(POLYSTORE_IOSTAT) $(LIBSRC) $(LIBS) $(LDFLAGS)
 
-polyos:
-	make clean -C $(POLYOS_DIR)
-	make -C $(POLYOS_DIR)
-
 clean:
 	rm -rf $(BUILD)/*.o
 	rm -rf $(BUILD)/*.so
 	rm -rf $(BUILD)/test_shim
-	make clean -C $(POLYOS_DIR)
 	make clean -C $(INTERVAL_TREE_DIR)
 	make clean -C $(SYSCALL_INTERCEPT_DIR)
 	rm -rf $(SYSCALL_INTERCEPT_DIR)/*
