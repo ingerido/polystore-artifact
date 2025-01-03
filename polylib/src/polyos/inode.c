@@ -83,15 +83,17 @@ out:
  * free a new in-memory Poly-index memory region
  */
 void free_poly_index(struct poly_inode *inode) {
-        unsigned long index_addr = GET_POLY_INDEX_VADDR(inode->ino);
+        unsigned long index_addr = 0;
         unsigned long pace = 0;
         struct vm_area_struct *vma = NULL;
-#if 0
+
         if (!inode || !inode->index) {
                 POLYOS_ERROR("Poly-inode or Poly-index NULL!");
                 return;
         }
-#endif
+
+        index_addr = GET_POLY_INDEX_VADDR(inode->ino);
+
         vma = find_vma(current->mm, (unsigned long)index_addr);
         if (!vma || vma->vm_start != POLY_INDEX_VADDR_BASE ||
                     vma->vm_end != POLY_INDEX_VADDR_BASE +
@@ -114,14 +116,16 @@ void free_poly_index(struct poly_inode *inode) {
  * free a new in-memory Poly-inode memory region
  */
 void free_poly_inode(struct poly_inode *inode) {
-        unsigned long inode_addr = GET_POLY_INODE_VADDR(inode->ino);
+        unsigned long inode_addr = 0;
         struct vm_area_struct *vma = NULL;
-#if 0
+
         if (!inode) {
                 POLYOS_ERROR("Poly-inode or Poly-index NULL!");
                 return;
         }
-#endif
+
+        inode_addr = GET_POLY_INODE_VADDR(inode->ino);
+
         vma = find_vma(current->mm, (unsigned long)inode_addr);
         if (!vma || vma->vm_start != POLY_INODE_VADDR_BASE ||
                     vma->vm_end != POLY_INODE_VADDR_BASE +
@@ -185,20 +189,19 @@ struct poly_inode* i_hashtable_search(uint32_t path_hash) {
         return inode;
 }
 
-struct poly_inode* i_hashtable_delete(uint32_t path_hash) {
-        struct poly_inode *inode = NULL;
+void i_hashtable_delete(uint32_t path_hash) {
         struct i_hash_node *entry = NULL;
         write_lock(&i_hashtable_lock);
         hash_for_each_possible(i_hashtable, entry, hash_node, path_hash) {
                 if (entry->path_hash == path_hash){
-                        inode = entry->inode;
-                        hash_del(&entry->hash_node);
-                        i_hash_node_free(entry);
                         break;
                 }
         }
+        if (entry) {
+                hash_del(&entry->hash_node);
+                i_hash_node_free(entry);
+        }
         write_unlock(&i_hashtable_lock);
-        return inode;
 }
 
 struct poly_inode* i_hashtable_search_and_insert(uint32_t path_hash, mode_t type) {
