@@ -427,7 +427,7 @@ long polyos_close(unsigned long arg) {
 
         inode = i_hashtable_search(path_hash);
         if (!inode) {
-                POLYOS_ERROR("Failed to find inode for unlink!");
+                POLYOS_ERROR("Failed to find inode for close!");
                 ret = -ENOENT;
                 goto out;
         }
@@ -454,7 +454,7 @@ long polyos_close(unsigned long arg) {
         while(__sync_lock_test_and_set(&inode->spinlock, 1));
         if (--inode->refcount == 0 && inode->reclaim == 1) {
                 i_hashtable_delete(path_hash);
-                free_poly_index(inode->index);
+                free_poly_index(inode);
                 free_poly_inode(inode);
                 goto out;
         }
@@ -520,7 +520,7 @@ long polyos_unlink(unsigned long arg) {
         while(__sync_lock_test_and_set(&inode->spinlock, 1));
         if (inode->refcount == 0) {
                 i_hashtable_delete(path_hash);
-                free_poly_index(inode->index);
+                free_poly_index(inode);
                 free_poly_inode(inode);
                 goto out;
         } else {

@@ -66,7 +66,7 @@ void free_poly_inode(struct poly_inode *inode);
 void free_poly_index(struct poly_inode *inode);
 int i_hashtable_insert(uint32_t path_hash, struct poly_inode *inode);
 struct poly_inode* i_hashtable_search(uint32_t path_hash);
-struct poly_inode* i_hashtable_delete(uint32_t path_hash);
+void i_hashtable_delete(uint32_t path_hash);
 struct poly_inode* i_hashtable_search_and_insert(uint32_t path_hash,
 						 mode_t type);
 int i_hashtable_search_and_rename(uint32_t old_path_hash, 

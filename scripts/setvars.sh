@@ -58,7 +58,7 @@ set_env_vars () {
 	export VTUNE_PATH=/opt/intel/vtune_amplifier_2019.4.0.597835 
 
 	# Results variables
-	export RESULTS_PATH=$PWD/experiments/results/$USER
+	export RESULTS_PATH=$PWD/resultgen/results/$USER
 
 	set +x
 }
