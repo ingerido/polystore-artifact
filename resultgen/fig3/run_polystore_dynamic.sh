@@ -59,6 +59,8 @@ export LD_LIBRARY_PATH
 # Run benchmark
 for i in {0..4}
 do
+        export POLYSTORE_SCHED_SPLIT_POINT=8
+
         # Load PolyOS module
         $BASE/scripts/polyos_install.sh
 
@@ -77,8 +79,6 @@ do
                         FlushDisk
                 fi
                 echo "start $workload $thread"
-
-                export POLYSTORE_SCHED_SPLIT_POINT=8
 
                 echo "WORKLOADID"$workloadid
 

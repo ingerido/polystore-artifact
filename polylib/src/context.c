@@ -262,6 +262,8 @@ int polystore_inode_hashmap_iterate(poly_inode_hashmap_iter_op func) {
 printf("clean iterate start...\n");
         HASH_ITER(hh, poly_inode_hashmap, s, tmp) {
                 inode = (struct poly_inode*)s->inode; 
+                if (inode->ino < 0)
+                        continue;
                 func(inode);
         }
 printf("clean iterate end...\n");
