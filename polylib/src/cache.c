@@ -14,11 +14,11 @@
 #include "polystore.h"
 #include "thpool.h"
 
-#define DEFAULT_CACHE_FLUSHING_THREAD_NR 1
+#define DEFAULT_CACHE_FLUSHING_THREAD_NR 2
 //#define DEFAULT_CACHE_FLUSHING_START_THRES (1UL << 30)
 //#define DEFAULT_CACHE_FLUSHING_END_THRES (1UL << 29)
-#define DEFAULT_CACHE_FLUSHING_START_THRES (1UL << 34)
-#define DEFAULT_CACHE_FLUSHING_END_THRES (1UL << 33)
+#define DEFAULT_CACHE_FLUSHING_START_THRES (1UL << 35)
+#define DEFAULT_CACHE_FLUSHING_END_THRES (1UL << 34)
 
 /* Total cache size */
 unsigned long poly_cache_size = 0;
@@ -775,9 +775,14 @@ void poly_cache_exit(void) {
         thpool_wait(poly_cache_thpool);
 
         /* Reclaim per-inode interval-tree and cache buffer */
+#ifndef POLYSTORE_POLYCACHE_SHM
         polystore_inode_hashmap_iterate(poly_cache_free);
+#endif
 
         /* Release background cache flushing thread worker queue */
         free(poly_cache_flushing_queue);
         free(poly_cache_flushing_queue_mutex);
+
+        /* Free shared memory */
+        poly_cache_mm_exit();
 }

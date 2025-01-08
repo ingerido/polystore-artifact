@@ -59,6 +59,7 @@ export LD_LIBRARY_PATH
 # Run benchmark
 for i in {0..4}
 do
+        export POLYSTORE_SCHED_SPLIT_POINT=${thresholdarr[i]}
 
         # Load PolyOS module
         $BASE/scripts/polyos_install.sh
@@ -79,8 +80,6 @@ do
                 fi
                 echo "start $workload $thread"
 
-                export POLYSTORE_SCHED_SPLIT_POINT=${thresholdarr[i]}
-
                 echo "WORKLOADID"$workloadid
 
                 numactl --cpunodebind=0 env LD_PRELOAD=$POLYLIB_PATH/build/libpolystore.so $MICROBENCH_PATH/hetero_io_bench_transparent -r $thread -j $workloadid -s 4096 -t 2 -y 0 -x 0 -z 1g -f 1 -d 1 &> $output/result.txt
@@ -89,6 +88,8 @@ do
                 FlushDisk
                 sleep 2
         done
+
+        unset POLYSTORE_SCHED_SPLIT_POINT
 
         # Uninstall PolyOS module
         $BASE/scripts/polyos_uninstall.sh

@@ -9,7 +9,6 @@ result_dir=$RESULTS_PATH/fig6_a_b/polystore-polycache/
 
 # Setup parameters
 declare -a threadarr=("2" "4" "8" "16" "32")
-declare -a thresholdarr=("1" "2" "4" "8" "8")
 declare -a workloadarr=("seqwrite" "randread" "randwrite" "seqread")
 declare -a workloadidarr=("2" "3" "4" "1")
 
@@ -59,7 +58,9 @@ export LD_LIBRARY_PATH
 # Run benchmark
 for i in {0..4}
 do
-        export POLYSTORE_SCHED_SPLIT_POINT=${thresholdarr[i]}
+        thread=${threadarr[i]}
+        export POLYSTORE_SCHED_SPLIT_POINT=$((thread + 4))
+        export POLYSTORE_POLYCACHE_POLICY=2
 
         # Load PolyOS module
         $BASE/scripts/polyos_install.sh
@@ -68,7 +69,6 @@ do
         do
                 workload=${workloadarr[j]}
                 workloadid=${workloadidarr[j]}
-                thread=${threadarr[i]}
                 output="$result_dir/$workload/$thread"
                 if [ ! -d "$output" ]; then
                         mkdir -p $output
@@ -89,6 +89,9 @@ do
                 FlushDisk
                 sleep 2
         done
+
+        unset POLYSTORE_SCHED_SPLIT_POINT
+        unset POLYSTORE_POLYCACHE_POLICY
 
         # Uninstall PolyOS module
         $BASE/scripts/polyos_uninstall.sh

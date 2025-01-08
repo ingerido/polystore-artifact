@@ -75,5 +75,7 @@ echo "end $workload $thread"
 FlushDisk
 sleep 2
 
+unset POLYSTORE_SCHED_SPLIT_POINT
+
 # Uninstall PolyOS module
 $BASE/scripts/polyos_uninstall.sh

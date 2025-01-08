@@ -680,7 +680,7 @@ procflow_shutdown(void)
 #ifdef HAVE_SIGSEND
 			(void) sigsend(P_PID, pid, SIGUSR1);
 #else
-			(void) kill(pid, SIGUSR1);
+			(void) kill(pid, SIGTERM);
 #endif
 			procflow_wait(pid);
 		}

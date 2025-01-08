@@ -8,7 +8,7 @@
 
 #include "polyos.h"
 
-#define POLY_INODE_HASHTABLE_ORDER 12
+#define POLY_INODE_HASHTABLE_ORDER 14
 
 uint32_t next_avail_inode_no = 0;
 

@@ -35,6 +35,8 @@ void polystore_init(void) {
         int ret = 0;
         const char *shell_sched_split_point = NULL;
         const char *shell_cache_policy = NULL;
+        const char *shell_cache_flush_begin = NULL;
+        const char *shell_cache_flush_end = NULL;
         struct polyos_client_init_cmd cmd;
         void *mmap_inode = NULL, *mmap_index = NULL, *mmap_taskctx = NULL;
 
@@ -50,6 +52,18 @@ void polystore_init(void) {
         shell_cache_policy = getenv("POLYSTORE_POLYCACHE_POLICY");
                 if (shell_cache_policy) {
                 poly_cache_policy = atoi((char*)shell_cache_policy);
+        }
+
+        shell_cache_flush_begin = getenv("POLYSTORE_POLYCACHE_FLUSH_BEGIN");
+                if (shell_cache_flush_begin) {
+                poly_cache_flushing_begin = atol((char*)shell_cache_flush_begin);
+                printf("##### flush begin %lu\n", poly_cache_flushing_begin);
+        }
+
+        shell_cache_flush_end = getenv("POLYSTORE_POLYCACHE_FLUSH_END");
+                if (shell_cache_flush_end) {
+                poly_cache_flushing_end = atol((char*)shell_cache_flush_end);
+                printf("##### flush end %lu\n", poly_cache_flushing_end);
         }
 #endif
 

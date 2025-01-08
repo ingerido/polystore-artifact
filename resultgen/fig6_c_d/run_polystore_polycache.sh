@@ -9,7 +9,7 @@ result_dir=$RESULTS_PATH/fig6_c_d/polystore-polycache/
 
 # Setup parameters
 declare -a cachesizearr=("2" "4" "8" "16" "32")
-declare -a flushingbeginarr=("22369803776" "22569803776" "22769803776" "30064771072" "36359738368")
+declare -a flushingbeginarr=("23369803776" "23969803776" "26269803776" "30064771072" "36359738368")
 declare -a flushingendarr=("15032385536" "15032385536" "15032385536" "17179869184" "17179869184")
 declare -a workloadarr=("seqwrite" "randread" "randwrite" "seqread")
 declare -a workloadidarr=("2" "3" "4" "1")
@@ -63,7 +63,8 @@ do
         cachesize=${cachesizearr[i]}
         export POLYSTORE_POLYCACHE_FLUSH_BEGIN=${flushingbeginarr[i]}
         export POLYSTORE_POLYCACHE_FLUSH_END=${flushingendarr[i]}
-        export POLYSTORE_SCHED_SPLIT_POINT=8
+        export POLYSTORE_POLYCACHE_POLICY=2
+        export POLYSTORE_SCHED_SPLIT_POINT=36
 
         # Load PolyOS module
         $BASE/scripts/polyos_install.sh
@@ -86,7 +87,7 @@ do
 
                 echo "WORKLOADID"$workloadid
 
-                numactl --cpunodebind=0 env LD_PRELOAD=$POLYLIB_PATH/build/libpolystore_cache.so $MICROBENCH_PATH/hetero_io_bench_transparent -r $thread -j $workloadid -s 4096 -t 2 -y 0 -x 0 -z 1g -f 1 -d 1 &> $output/result.txt
+                numactl --cpunodebind=0 env LD_PRELOAD=$POLYLIB_PATH/build/libpolystore_cache_sensitivity.so $MICROBENCH_PATH/hetero_io_bench_transparent -r $thread -j $workloadid -s 4096 -t 2 -y 0 -x 0 -z 1g -f 1 -d 1 &> $output/result.txt
 
                 echo "end $workload $thread"
                 FlushDisk

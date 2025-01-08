@@ -12,7 +12,7 @@ result_dir=$RESULTS_PATH/polystore
 # Setup Parameters
 declare -a benchmarkarr=("fillycsb" "ycsbwklda" "ycsbwkldb" "ycsbwkldc" "ycsbwkldd" "ycsbwklde" "ycsbwkldf")
 declare -a parameterarr=("" "--use_existing_db=1" "--use_existing_db=1")
-VALUES=50000
+VALUES=500000
 VALUESIZE=4096
 BGTHREADS=8
 DBDATA_PATH=$POLYSTORE_DIR/db
