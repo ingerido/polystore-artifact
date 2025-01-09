@@ -26,6 +26,7 @@ workload_t config_workload = DEFAULT_WORKLOAD;
 io_type_t config_io_type = DEFAULT_IO_TYPE;
 random_seed_t config_rand_seed = DEFAULT_RAND_SEED;
 hetero_factor_t config_hetero_factor = DEFAULT_HETERO_FACTOR;
+const char *shell_cache_policy = NULL;
 
 uint64_t *random_arr = NULL;
 
@@ -119,6 +120,12 @@ void setup_workload() {
 			}
 			printf("Running %d Random %d Byte Read threads Workload\n",
 				config_thread_nr, config_io_size);
+
+                        shell_cache_policy = getenv("POLYSTORE_POLYCACHE_POLICY"); 
+                        if (shell_cache_policy && (atoi((char*)shell_cache_policy) == 2)) {
+                                g_throughput = (double)(2UL * 1024 * 1024 * 1024);
+                        }
+
 			break;
 
 		case WRITE_RAND: // random write
@@ -338,7 +345,7 @@ void* do_seq_write(void* arg) {
         g_latency += latency;
 	pthread_mutex_unlock(&g_mutex);
 
-        close(fd);                                                                                                                                                      
+        close(fd); 
         free(buf);
 
 	return NULL;
@@ -414,7 +421,7 @@ void* do_rand_read(void* arg) {
         g_latency += latency;
 	pthread_mutex_unlock(&g_mutex);
 
-        close(fd);                                                                                                                                                      
+        close(fd); 
         free(buf);
 
 	//printf("thread %d finishes\n", argument.id);
@@ -491,7 +498,7 @@ void* do_rand_write(void* arg) {
         g_latency += latency;
 	pthread_mutex_unlock(&g_mutex);
 
-        close(fd);                                                                                                                                                      
+        close(fd); 
         free(buf);
 
 	return NULL;

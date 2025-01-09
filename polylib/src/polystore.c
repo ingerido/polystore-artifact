@@ -57,13 +57,11 @@ void polystore_init(void) {
         shell_cache_flush_begin = getenv("POLYSTORE_POLYCACHE_FLUSH_BEGIN");
                 if (shell_cache_flush_begin) {
                 poly_cache_flushing_begin = atol((char*)shell_cache_flush_begin);
-                printf("##### flush begin %lu\n", poly_cache_flushing_begin);
         }
 
         shell_cache_flush_end = getenv("POLYSTORE_POLYCACHE_FLUSH_END");
                 if (shell_cache_flush_end) {
                 poly_cache_flushing_end = atol((char*)shell_cache_flush_end);
-                printf("##### flush end %lu\n", poly_cache_flushing_end);
         }
 #endif
 

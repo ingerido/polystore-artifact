@@ -350,6 +350,7 @@ ssize_t polystore_append_iter_polycache(struct poly_file *file, const void *buf,
 
         pthread_rwlock_unlock(&inode->it_tree_lock);
 
+#ifdef POLYSTORE_POLYCACHE_SENSITIVITY
         /* evict Poly cache if necessary */
         if (poly_cache_size > poly_cache_flushing_begin) {
                 if (__sync_lock_test_and_set(&poly_cache_flushing_indicator, 1) == 0) {
@@ -358,6 +359,7 @@ ssize_t polystore_append_iter_polycache(struct poly_file *file, const void *buf,
                 }
                 //thpool_wait(poly_cache_thpool);
         }
+#endif
 
         /* Update statistics */
         task_ctx->throughput += copied;
@@ -535,6 +537,7 @@ ssize_t polystore_write_iter_polycache(struct poly_file *file, const void *buf,
         /* Update poly_inode size */
         inode->size = (end + 1 > inode->size) ? (end + 1) : inode->size;
 
+#ifdef POLYSTORE_POLYCACHE_SENSITIVITY
         /* evict Poly cache if necessary */
         if (poly_cache_size > poly_cache_flushing_begin) {
                 if (__sync_lock_test_and_set(&poly_cache_flushing_indicator, 1) == 0) {
@@ -543,7 +546,7 @@ ssize_t polystore_write_iter_polycache(struct poly_file *file, const void *buf,
                 }
                 //thpool_wait(poly_cache_thpool);
         }
-
+#endif
         /* Update statistics */
         task_ctx->throughput += copied;
         task_ctx->throughput_write += copied;
