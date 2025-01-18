@@ -38,6 +38,7 @@ ResetFile
 $BASE/scripts/polyos_install.sh
 
 export POLYSTORE_SCHED_SPLIT_POINT=8
+export POLYSTORE_POLYCACHE_POLICY=2
 
 echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
 #LD_PRELOAD=$POLYLIB_PATH/build/libpolystore_cache_shm.so perf record -g -o perf.data $FILEBENCH_PATH/filebench -f $FILEBENCH_PATH/workloads_polystore/fileserver_16.f

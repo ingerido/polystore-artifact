@@ -3,7 +3,7 @@
 
 cd ../../
 source scripts/setvars.sh
-cd experiments/rocksdb
+cd experiments/redis
 
 REDISCONF=$REDIS_PATH/redis-conf
 REDISDIR=$REDIS_PATH/src

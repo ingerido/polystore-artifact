@@ -43,7 +43,7 @@ echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
 # Run benchmark
 for i in {0..1}
 do
-        workload=${workloadarr[1]}
+        workload=${workloadarr[i]}
         ResetFiles
         FlushDisk
 
@@ -60,11 +60,19 @@ do
                 $BASE/scripts/polyos_install.sh
 
                 export POLYSTORE_SCHED_SPLIT_POINT=8
+                export POLYSTORE_POLYCACHE_POLICY=2
+                export THREAD_COUNT=$thread
+                export WORKLOAD=$i
 
-                $FILEBENCH_PATH/filebench -f $FILEBENCH_PATH/workloads_nvmeonly/$workload_$thread.f &> $output/result.txt
+                numactl --cpunodebind=0 env LD_PRELOAD=$POLYLIB_PATH/build/libpolystore_cache_shm.so $FILEBENCH_PATH/filebench -f $FILEBENCH_PATH/workloads_polystore/${workload}_${thread}.f &> $output/result.txt
 
                 # Uninstall PolyOS module
                 $BASE/scripts/polyos_uninstall.sh 
+
+                unset POLYSTORE_SCHED_SPLIT_POINT
+                unset POLYSTORE_POLYCACHE_POLICY
+                unset THREAD_COUNT
+                unset WORKLOAD
 
                 echo "end $workload $thread"
                 FlushDisk

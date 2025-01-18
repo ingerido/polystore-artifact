@@ -204,6 +204,7 @@ void i_hashtable_delete(uint32_t path_hash) {
         write_unlock(&i_hashtable_lock);
 }
 
+#if 0
 struct poly_inode* i_hashtable_search_and_insert(uint32_t path_hash, mode_t type) {
         struct poly_inode *inode = NULL;
         struct poly_index *index = NULL;
@@ -236,6 +237,45 @@ struct poly_inode* i_hashtable_search_and_insert(uint32_t path_hash, mode_t type
         hash_add(i_hashtable, &entry->hash_node, path_hash);
 out:
         write_unlock(&i_hashtable_lock);
+        return inode;
+}
+#endif
+
+struct poly_inode* i_hashtable_search_and_insert(uint32_t path_hash, mode_t type) {
+        struct poly_inode *inode = NULL;
+        struct poly_index *index = NULL;
+        struct i_hash_node *entry = NULL;
+
+        index = alloc_poly_index();
+        if (!index){
+                POLYOS_ERROR("Failed to allocate memory for new index");
+                inode = ERR_PTR(-ENOMEM);
+                goto out;
+        }
+
+        inode = alloc_poly_inode(path_hash, type);
+        if (!inode){
+                POLYOS_ERROR("Failed to allocate memory for new inode");
+                inode = ERR_PTR(-ENOMEM);
+                goto out;
+        }
+        inode->index = (void*)index;
+
+        write_lock(&i_hashtable_lock);
+        hash_for_each_possible(i_hashtable, entry, hash_node, path_hash) {
+                if (entry->path_hash == path_hash) {
+                        vfree(inode->index);
+                        vfree(inode);
+                        inode = entry->inode;
+                        write_unlock(&i_hashtable_lock);
+                        goto out;
+                }
+        }
+
+        entry = i_hash_node_create(path_hash, inode);
+        hash_add(i_hashtable, &entry->hash_node, path_hash);
+        write_unlock(&i_hashtable_lock);
+out:
         return inode;
 }
 

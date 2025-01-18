@@ -3,7 +3,7 @@
 
 cd ../../
 source scripts/setvars.sh
-cd experiments/rocksdb
+cd experiments/redis
 
 REDISCONF=$REDIS_PATH/redis-conf
 REDISDIR=$REDIS_PATH/src
@@ -75,8 +75,8 @@ TERMINATE() {
 
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$POLYLIB_PATH/libs/syscall-intercept/build/:$POLYLIB_PATH/libs/interval-tree/
 export LD_LIBRARY_PATH
-export INTERCEPT_LOG="./intercept_log"
-export INTERCEPT_LOG_TRUNC=0
+#export INTERCEPT_LOG="./intercept_log"
+#export INTERCEPT_LOG_TRUNC=0
 
 CLEAN
 PREPARE

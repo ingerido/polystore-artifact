@@ -28,7 +28,7 @@ ResetFile() {
 ResetFile
 
 echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
-$FILEBENCH_PATH/filebench -f $FILEBENCH_PATH/workloads_pmonly/fileserver_16.f
+$FILEBENCH_PATH/filebench -f $FILEBENCH_PATH/workloads_pmonly/fileserver_32.f
 #$FILEBENCH_PATH/filebench -f $FILEBENCH_PATH/workloads_pmonly/varmail_16.f
 echo 2 | sudo tee /proc/sys/kernel/randomize_va_space
 

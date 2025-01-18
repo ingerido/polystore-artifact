@@ -34,7 +34,7 @@ echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
 # Run benchmark
 for i in {0..1}
 do
-        workload=${workloadarr[1]}
+        workload=${workloadarr[i]}
         ResetFiles
         FlushDisk
 
@@ -47,7 +47,7 @@ do
                 fi
                 echo "start $workload $thread"
 
-                $FILEBENCH_PATH/filebench -f $FILEBENCH_PATH/workloads_pmonly/$workload_$thread.f &> $output/result.txt
+                $FILEBENCH_PATH/filebench -f $FILEBENCH_PATH/workloads_pmonly/${workload}_${thread}.f &> $output/result.txt
 
                 echo "end $workload $thread"
                 FlushDisk
