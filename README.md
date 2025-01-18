@@ -169,31 +169,31 @@ $ cd $BASE/experiments/microbench
 #### Run *PolyStore-static* 
 
 ```
-$ ./scripts/run_polystore_static.sh
+$ ./run_polystore_static.sh
 ```
 
 #### Run *PolyStore-dynamic* 
 
 ```
-$ ./scripts/run_polystore_dynamic.sh
+$ ./run_polystore_dynamic.sh
 ```
 
 #### Run *PolyStore (w/ Poly-cache enabled)* 
 
 ```
-$ ./scripts/run_polystore_polycache.sh
+$ ./run_polystore_polycache.sh
 ```
 
 #### Run *PM-only (NOVA)* 
 
 ```
-$ ./scripts/run_pmonly.sh
+$ ./run_pmonly.sh
 ```
 
 #### Run *NVMe-only (ext4)* 
 
 ```
-$ ./scripts/run_nvmeonly.sh
+$ ./run_nvmeonly.sh
 ```
 
 ### 2. Filebench
@@ -207,19 +207,19 @@ $ cd $BASE/experiments/filebench
 #### Run *PolyStore (w/ Poly-cache enabled)* 
 
 ```
-$ ./scripts/run_polystore_polycache.sh
+$ ./run_polystore_polycache.sh
 ```
 
 #### Run *PM-only (NOVA)* 
 
 ```
-$ ./scripts/run_pmonly.sh
+$ ./run_pmonly.sh
 ```
 
 #### Run *NVMe-only (ext4)* 
 
 ```
-$ ./scripts/run_nvmeonly.sh
+$ ./run_nvmeonly.sh
 ```
 
 ### 3. RocksDB
@@ -233,19 +233,19 @@ $ cd $BASE/experiments/rocksdb
 #### Run *PolyStore (w/ Poly-cache enabled)* 
 
 ```
-$ ./scripts/run_polystore_polycache_ycsb.sh
+$ ./run_polystore_polycache_ycsb.sh
 ```
 
 #### Run *PM-only (NOVA)* 
 
 ```
-$ ./scripts/run_pmonly_ycsb.sh
+$ ./run_pmonly_ycsb.sh
 ```
 
 #### Run *NVMe-only (ext4)* 
 
 ```
-$ ./scripts/run_nvmeonly_ycsb.sh
+$ ./run_nvmeonly_ycsb.sh
 ```
 
 ### 4. GraphWalker
@@ -259,13 +259,8 @@ $ cd $BASE/experiments/graphwalker
 #### Run *PolyStore (w/ Poly-cache enabled)* 
 
 ```
-$ ./scripts/run_polystore_polycache.sh
+$ ./run_polystore_polycache.sh
 ```
-
-#### 6. Reboot system (optional and only when necessary): 
-
-The system may require occasional reboots after running several experiments consecutively if the following error information shows up:
-```PolyStore ERROR: Failed to map inode region```
 
 
 ## Run Experiments and Generating Results: 
@@ -287,7 +282,12 @@ $ ./extract_results.sh
 
 ## Known issues
 
-1. The system may require occasional restarts as mentioned above. We recommend reviewers using our *sysreset* script,
+0. The PolyOS may incur software lock up and make the benchmarks or application hanging. (Solved)
+
+2. The system may show the following error information shows up: (Solved)
+```PolyStore ERROR: Failed to map inode region```
+
+We recommend reviewers using our *sysreset* script,
 ```
 # Navigate to the artifact's root folder
 $ cd /localhome/aereview/polystore-artifact
