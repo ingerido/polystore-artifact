@@ -6,7 +6,7 @@ This repository contains the artifact for reproducing our FAST '25 paper "PolySt
 * [Overview](#overview)
 * [Setup](#setup)
 * [Running Experiments](#running-experiments)
-* [Generating Results](#generating-results) (Work in progress)
+* [Generating Results](#generating-results)
 * [Known Issues](#known-issues)
 
 
@@ -154,7 +154,7 @@ If successful, you will see the following:
 /mnt/slow           /dev/nvme1n1p1         ext4          rw,relatime
 ```
 
-## Running Experiments:
+## Running Experiments: (Quick Tests)
 
 For the benchamrks and applicaions, we have separate running scripts for each approach listed in Table.3 in the paper
 
@@ -266,6 +266,26 @@ $ ./scripts/run_polystore_polycache.sh
 
 The system may require occasional reboots after running several experiments consecutively if the following error information shows up:
 ```PolyStore ERROR: Failed to map inode region```
+
+
+## Run Experiments and Generating Results: 
+
+For the benchamrks and applicaions, we have provided running scripts in batch to match them with the paper figures in evaluation sections.
+
+### Figure 3
+
+```
+$ cd $BASE/resultgen/fig3
+$ ./run_pmonly.sh
+$ ./run_nvmeonly.sh
+$ ./run_polystore.sh
+```
+
+After finish all of them, run the following result extraction scripts and it will extract all results in a human-readable format:
+```
+$ ./extract_results.sh
+```
+
 
 ## Known issues
 
