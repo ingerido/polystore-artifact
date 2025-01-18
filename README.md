@@ -272,10 +272,8 @@ The system may require occasional reboots after running several experiments cons
 
 For the benchamrks and applicaions, we have provided running scripts in batch to match them with the paper figures in evaluation sections.
 
-### Figure 3
-
 ```
-$ cd $BASE/resultgen/fig3
+$ cd $BASE/resultgen/figX
 $ ./run_pmonly.sh
 $ ./run_nvmeonly.sh
 $ ./run_polystore.sh
