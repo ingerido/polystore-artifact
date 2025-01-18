@@ -81,8 +81,10 @@ $ screen
 $ cd /localhome/aereview/polystore-artifact
 $ source scripts/setvars.sh
 $ cd $BASE/polylib
+$ make clean
 $ make
 $ cd $BASE/polylib/src/polyos
+$ make clean
 $ make
 $ cd $BASE/tools
 $ make
