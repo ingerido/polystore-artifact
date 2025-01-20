@@ -47,7 +47,7 @@ We use the following two devices as our base hetegorgeneous storage device confi
 
 ```
 $ mkdir /localhome/aereview/reviewX/
-$ cd /localhome/aereview
+$ cd /localhome/aereview/reviewX/
 $ git clone https://github.com/ingerido/polystore-artifact
 ```
 
