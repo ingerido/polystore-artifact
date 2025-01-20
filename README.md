@@ -51,7 +51,7 @@ $ cd /localhome/aereview/reviewX/
 $ git clone https://github.com/ingerido/polystore-artifact
 ```
 
-### Step 2: Install required libraries for PolyStore
+### Step 2: Install required libraries and set environment variables for PolyStore
 
 ```
 $ cd polystore-artifact
