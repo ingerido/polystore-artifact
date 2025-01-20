@@ -43,9 +43,10 @@ We use the following two devices as our base hetegorgeneous storage device confi
 
 **NOTE: If you are using our provided machine for AE, we have cloned the code and installed the kernel for you. The repo path is `/localhome/aereview`, you can directly go to Step 4.**
 
-### Step 1: Get PolyStore source code on Github
+### Step 1: Get PolyStore source code on Github and clone it to your own working directory (Reviewer A, B, C, D)
 
 ```
+$ mkdir /localhome/aereview/reviewX/
 $ cd /localhome/aereview
 $ git clone https://github.com/ingerido/polystore-artifact
 ```
