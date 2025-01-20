@@ -59,7 +59,7 @@ $ source scripts/setvars   # Install dependent packages and setup enviroment var
 ```
 NOTE: If you are prompted during Ubuntu package installation, please hit enter and all the package installation to complete.
 
-### Step 3: Compile the kernel
+### Step 3: Compile the kernel (Skip if you are using our lab machine)
 
 On a Cloudlab machine, we need to install Linux 5.1.0+ kernel with NOVA file systems used in PolyStore
 
