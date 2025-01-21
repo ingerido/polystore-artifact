@@ -61,7 +61,7 @@ NOTE: If you are prompted during Ubuntu package installation, please hit enter a
 
 ### Step 3: Compile the kernel (Skip if you are using our lab machine)
 
-On a Cloudlab machine, we need to install Linux 5.1.0+ kernel with NOVA file systems used in PolyStore
+On a Cloudlab machine, we need to install Linux 5.1.0+SPFS kernel with NOVA file systems used in PolyStore, and also the SPFS compared in our paper.
 
 NOTE:  If you are using our provided machine for AE, we have installed the kernel for you. You don't need to reinstall the kernel. 
 
@@ -270,12 +270,90 @@ $ ./run_polystore_polycache.sh
 
 For the benchamrks and applicaions, we have provided running scripts in batch to match them with the paper figures in evaluation sections.
 
+### Single Device and PolyStore
+
+When running single device (PM-only and NVMe-only) or PolyStore, make sure the desired file systems are mounted properly (**Step 6** in the **Environment** section).
+
 ```
 $ cd $BASE/resultgen/figX
 $ ./run_pmonly.sh
 $ ./run_nvmeonly.sh
 $ ./run_polystore.sh
 ```
+
+### SPFS
+
+When running SPFS, please first umount all the file systems for our target device:
+
+```
+$ sudo umount /mnt/fast
+$ sudo umount /mnt/slow
+```
+
+Then make sure the kernel version is desired (5.1.0+SPFS)
+
+```
+$ uname -r
+```
+
+Then mount the SPFS with the following command:
+
+```
+$ cd $BASE
+$ ./scripts/setup_spfs.sh
+```
+
+After SPFS mounted successfully, you will see the following: (You can see /mnt/spfs is mounted twice, because it is a stackable file system where a standalone SPFS file system is mounted on top of the backend device with ext4)
+
+```
+/mnt/spfs           /dev/pmem0             NOVA          rw,relatime,mode=755,uid=0,gid=0
+/mnt/spfs           /dev/nvme1n1p1         ext4          rw,relatime
+```
+
+Run SPFS: (If you encounter kernel panic in RocksDB YCSB, let us know, we will reboot for you. SPFS sometimes does not run in some of our experiments due to its bugs, I cannot do much about it >_< )
+
+```
+$ cd $BASE/resultgen/figX
+$ ./run_spfs.sh
+```
+
+### Orthus
+
+When running Orthus, we need to switch to another kernel version (5.4.0-150-generic) because Orthus is built on top of OpenCAS block cache framework and can only be compiled and work on this kernel version from what we run.
+
+```
+$ sudo umount /mnt/fast
+$ sudo umount /mnt/slow
+```
+
+After reboot, make sure the kernel version is desired (5.4.0-150-generic)
+
+```
+$ uname -r
+```
+
+Then mount the Orthus with the following command:
+
+```
+$ cd $BASE
+$ ./scripts/setup_orthus.sh
+```
+
+After Orthus mounted successfully, you will see the following: (You can see /mnt/orthus is mounted with /dev/cas1 - the virtual device with block cache setup)
+
+```
+/mnt/spfs           /dev/pmem0             NOVA          rw,relatime,mode=755,uid=0,gid=0
+/mnt/spfs           /dev/nvme1n1p1         ext4          rw,relatime
+```
+
+Run Orthus: (If you encounter kernel panic in Orthus, let us know, we will reboot for you. Orthus sometimes does not run in some of our experiments due to its bugs, I cannot do much about it >_< )
+
+```
+$ cd $BASE/resultgen/figX
+$ ./run_orthus.sh
+```
+
+### Extracting results
 
 After finish all of them, run the following result extraction scripts and it will extract all results in a human-readable format:
 ```
