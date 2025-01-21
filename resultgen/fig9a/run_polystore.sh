@@ -42,8 +42,10 @@ $BASE/scripts/polyos_install_large_index.sh
 export POLYSTORE_SCHED_SPLIT_POINT=8
 
 # Copy Graph
+echo "copying dataset to the working directory ..."
 ResetFiles
 LD_PRELOAD=$POLYLIB_PATH/build/libpolystore_filecopy.so ../../tools/filecopy /mnt/dataset/com-friendster.ungraph.txt $GRAPHFILE
+echo "finishing copying dataset to the working directory"
 
 echo "start running GraphWalker MSPRR"
 

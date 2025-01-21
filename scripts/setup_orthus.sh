@@ -19,10 +19,10 @@ sudo casadm -Q -i 1 -c mfwb
 sudo casadm -L
 
 # Step 4: mount CAS device
-if [ ! -d /mnt/cas ]; then
-	sudo mkdir /mnt/cas
+if [ ! -d /mnt/orthus ]; then
+	sudo mkdir /mnt/orthus
 fi
-sudo mount /dev/cas1-1 /mnt/cas
-sudo chown -R $USER /mnt/cas
+sudo mount /dev/cas1-1 /mnt/orthus
+sudo chown -R $USER /mnt/orthus
 
 set +x

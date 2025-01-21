@@ -1,5 +1,9 @@
 #!/bin/bash
 
+cd ../../
+source scripts/setvars.sh
+cd resultgen/tab4
+
 # Output result directory
 result_dir=$RESULTS_PATH/fig3
 
