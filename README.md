@@ -6,7 +6,7 @@ This repository contains the artifact for reproducing our FAST '25 paper "PolySt
 * [Overview](#overview)
 * [Setup](#setup)
 * [Running Experiments](#running-experiments)
-* [Generating Results](#generating-results) (Work in progress)
+* [Generating Results](#generating-results)
 * [Known Issues](#known-issues)
 
 
@@ -43,14 +43,15 @@ We use the following two devices as our base hetegorgeneous storage device confi
 
 **NOTE: If you are using our provided machine for AE, we have cloned the code and installed the kernel for you. The repo path is `/localhome/aereview`, you can directly go to Step 4.**
 
-### Step 1: Get PolyStore source code on Github
+### Step 1: Get PolyStore source code on Github and clone it to your own working directory (Reviewer A, B, C, D)
 
 ```
-$ cd /localhome/aereview
+$ mkdir /localhome/aereview/reviewX/
+$ cd /localhome/aereview/reviewX/
 $ git clone https://github.com/ingerido/polystore-artifact
 ```
 
-### Step 2: Install required libraries for PolyStore
+### Step 2: Install required libraries and set environment variables for PolyStore
 
 ```
 $ cd polystore-artifact
@@ -58,7 +59,7 @@ $ source scripts/setvars   # Install dependent packages and setup enviroment var
 ```
 NOTE: If you are prompted during Ubuntu package installation, please hit enter and all the package installation to complete.
 
-### Step 3: Compile the kernel
+### Step 3: Compile the kernel (Skip if you are using our lab machine)
 
 On a Cloudlab machine, we need to install Linux 5.1.0+ kernel with NOVA file systems used in PolyStore
 
@@ -81,8 +82,10 @@ $ screen
 $ cd /localhome/aereview/polystore-artifact
 $ source scripts/setvars.sh
 $ cd $BASE/polylib
+$ make clean
 $ make
 $ cd $BASE/polylib/src/polyos
+$ make clean
 $ make
 $ cd $BASE/tools
 $ make
@@ -154,7 +157,7 @@ If successful, you will see the following:
 /mnt/slow           /dev/nvme1n1p1         ext4          rw,relatime
 ```
 
-## Running Experiments:
+## Running Experiments: (Quick Tests)
 
 For the benchamrks and applicaions, we have separate running scripts for each approach listed in Table.3 in the paper
 
@@ -169,31 +172,31 @@ $ cd $BASE/experiments/microbench
 #### Run *PolyStore-static* 
 
 ```
-$ ./scripts/run_polystore_static.sh
+$ ./run_polystore_static.sh
 ```
 
 #### Run *PolyStore-dynamic* 
 
 ```
-$ ./scripts/run_polystore_dynamic.sh
+$ ./run_polystore_dynamic.sh
 ```
 
 #### Run *PolyStore (w/ Poly-cache enabled)* 
 
 ```
-$ ./scripts/run_polystore_polycache.sh
+$ ./run_polystore_polycache.sh
 ```
 
 #### Run *PM-only (NOVA)* 
 
 ```
-$ ./scripts/run_pmonly.sh
+$ ./run_pmonly.sh
 ```
 
 #### Run *NVMe-only (ext4)* 
 
 ```
-$ ./scripts/run_nvmeonly.sh
+$ ./run_nvmeonly.sh
 ```
 
 ### 2. Filebench
@@ -207,19 +210,19 @@ $ cd $BASE/experiments/filebench
 #### Run *PolyStore (w/ Poly-cache enabled)* 
 
 ```
-$ ./scripts/run_polystore_polycache.sh
+$ ./run_polystore_polycache.sh
 ```
 
 #### Run *PM-only (NOVA)* 
 
 ```
-$ ./scripts/run_pmonly.sh
+$ ./run_pmonly.sh
 ```
 
 #### Run *NVMe-only (ext4)* 
 
 ```
-$ ./scripts/run_nvmeonly.sh
+$ ./run_nvmeonly.sh
 ```
 
 ### 3. RocksDB
@@ -233,19 +236,19 @@ $ cd $BASE/experiments/rocksdb
 #### Run *PolyStore (w/ Poly-cache enabled)* 
 
 ```
-$ ./scripts/run_polystore_polycache_ycsb.sh
+$ ./run_polystore_polycache_ycsb.sh
 ```
 
 #### Run *PM-only (NOVA)* 
 
 ```
-$ ./scripts/run_pmonly_ycsb.sh
+$ ./run_pmonly_ycsb.sh
 ```
 
 #### Run *NVMe-only (ext4)* 
 
 ```
-$ ./scripts/run_nvmeonly_ycsb.sh
+$ ./run_nvmeonly_ycsb.sh
 ```
 
 ### 4. GraphWalker
@@ -259,17 +262,35 @@ $ cd $BASE/experiments/graphwalker
 #### Run *PolyStore (w/ Poly-cache enabled)* 
 
 ```
-$ ./scripts/run_polystore_polycache.sh
+$ ./run_polystore_polycache.sh
 ```
 
-#### 6. Reboot system (optional and only when necessary): 
 
-The system may require occasional reboots after running several experiments consecutively if the following error information shows up:
-```PolyStore ERROR: Failed to map inode region```
+## Run Experiments and Generating Results: 
+
+For the benchamrks and applicaions, we have provided running scripts in batch to match them with the paper figures in evaluation sections.
+
+```
+$ cd $BASE/resultgen/figX
+$ ./run_pmonly.sh
+$ ./run_nvmeonly.sh
+$ ./run_polystore.sh
+```
+
+After finish all of them, run the following result extraction scripts and it will extract all results in a human-readable format:
+```
+$ ./extract_results.sh
+```
+
 
 ## Known issues
 
-1. The system may require occasional restarts as mentioned above. We recommend reviewers using our *sysreset* script,
+0. The PolyOS may incur software lock up and make the benchmarks or application hanging. (Solved)
+
+2. The system may show the following error information shows up: (Solved)
+```PolyStore ERROR: Failed to map inode region```
+
+We recommend reviewers using our *sysreset* script,
 ```
 # Navigate to the artifact's root folder
 $ cd /localhome/aereview/polystore-artifact
